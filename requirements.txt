@@ -1,0 +1,9 @@
+lxml
+selenium
+sqlalchemy
+clickhouse-sqlalchemy
+pydantic
+pytest
+psycopg2
+fastapi
+uvicorn
