@@ -1,7 +1,4 @@
-lxml
-selenium
 sqlalchemy
-clickhouse-sqlalchemy
 pydantic
 pytest
 psycopg2

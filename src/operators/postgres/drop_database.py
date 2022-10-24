@@ -4,7 +4,7 @@ from src.models.postgres.base_model import get_pg_session
 from src.models.postgres.images_info_model import ImagesInfoModel
 
 
-class DropDataBase:
+class DropDatabase:
     def __init__(self):
         self.images_info_table = ImagesInfoModel.__table__
 

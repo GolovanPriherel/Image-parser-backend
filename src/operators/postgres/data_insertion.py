@@ -6,11 +6,12 @@ from src.models.postgres.images_info_model import ImagesInfoModel, ImagesInfoSch
 
 
 class DataInsertion:
-    def __init__(self, data: List[ImagesInfoSchema]):
+    def __init__(self):
         self.images_info_table = ImagesInfoModel.__table__
-        self.data = data
 
-    def execute(self):
+
+    def execute(self, data: List[ImagesInfoSchema]):
+        self.data = data
         self.pg_session = get_pg_session()
 
         try:
@@ -23,8 +24,8 @@ class DataInsertion:
 
     def processing(self):
         for element in self.data:
-            element = dict(element)
             logging.warning(element)
+            element = dict(element)
             self.pg_session.execute(
                 self.images_info_table.insert().values(element)
             )

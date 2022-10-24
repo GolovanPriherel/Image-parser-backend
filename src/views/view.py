@@ -1,12 +1,13 @@
+import logging
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.operators.postgres import (
-    CreateDataBase,
-    DataInsertion,
-    DropDataBase
+    create_database,
+    data_insertion,
+    drop_database
 )
 
 
@@ -30,21 +31,21 @@ async def root():
 
 @router.get("/create_table")
 async def create_table():
-    CreateDataBase().execute()
+    create_database.execute()
 
     return 'Таблица успешно создана.'
 
 
 @router.post("/insert_data")
-async def insert_data(data: List[ImagesInfoSchema]):
-    DataInsertion(data).execute()
+async def insert_data(data: List[ImagesInfoSchema], background_tasks: BackgroundTasks):
+    background_tasks.add_task(data_insertion.execute(data), message="some notification")
 
     return f'Успешно записано {len(data)} записи.'
 
 
 @router.get("/drop_table")
 async def drop_table():
-    DropDataBase().execute()
+    drop_database.execute()
 
     return 'Таблица успешно удалена.'
 
