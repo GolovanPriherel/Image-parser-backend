@@ -5,6 +5,8 @@ engine = create_engine('postgresql+psycopg2://postgres:postgres@postgres/images_
 metadata = MetaData(bind=engine)
 Base = declarative_base(bind=engine)
 
+metadata.create_all()
+
 
 def get_pg_session():
     pg_session = Session(

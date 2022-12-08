@@ -9,7 +9,6 @@ class DataInsertion:
     def __init__(self):
         self.images_info_table = ImagesInfoModel.__table__
 
-
     def execute(self, data: List[ImagesInfoSchema]):
         self.data = data
         self.pg_session = get_pg_session()
