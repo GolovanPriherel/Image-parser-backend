@@ -1,12 +1,13 @@
 FROM python:3.8
 
-WORKDIR /
+RUN mkdir app/
+
+WORKDIR app/
 
 COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./src /src
-COPY server.py server.py
+COPY . app/
 
-CMD [ "python3", "server.py" ]
+CMD [ "python3", "app/server.py" ]

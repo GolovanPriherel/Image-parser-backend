@@ -4,16 +4,16 @@ services:
   postgres_db:
     image: postgres:13
     restart: always
-    hostname: postgres
-    volumes:
-      - "postgres_db:/var/lib/postgresql/data"
-    ports:
-      - "5432:5432"
+    hostname:
+      postgres_db
     environment:
-      POSTGRES_DB: images_info
+#      POSTGRES_DB: ${PG_DATABASE}
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_PORT: 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_db/:/var/lib/postgresql/data
 
   parser_backend_service:
     build:
@@ -23,6 +23,6 @@ services:
       - "5001:5001"
     volumes:
       - ./data:/data
-
-volumes:
-  postgres_db:
+      - .env:/.env
+    depends_on:
+      - postgres_db

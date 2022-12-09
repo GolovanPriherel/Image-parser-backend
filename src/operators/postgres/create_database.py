@@ -7,15 +7,14 @@ class CreateDatabase:
         self.images_info_table = ImagesInfoModel.__table__
 
     def execute(self):
-        self.pg_session = get_pg_session()
-
-        try:
-            self.processing()
-            self.pg_session.commit()
-        except Exception as e:
-            raise Exception(e)
-        finally:
-            self.pg_session.close()
+        with get_pg_session() as pg_session:
+            try:
+                self.processing()
+                pg_session.commit()
+            except Exception as e:
+                raise Exception(e)
+            finally:
+                pg_session.close()
 
     def processing(self):
         self.images_info_table.create()

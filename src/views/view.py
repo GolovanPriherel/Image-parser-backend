@@ -37,16 +37,7 @@ async def create_table():
 
 
 @router.post("/insert_data")
-async def insert_data(body: List[ImagesInfoSchema], background_tasks: BackgroundTasks):
-    logging.warning(body)
-    # background_tasks.add_task(data_insertion.execute(data), message="some notification")
+async def insert_data(body: List[ImagesInfoSchema]):
     data_insertion.execute(body)
 
     return f'Успешно записано {len(body)} записи.'
-
-
-@router.get("/drop_table")
-async def drop_table():
-    drop_database.execute()
-
-    return 'Таблица успешно удалена.'

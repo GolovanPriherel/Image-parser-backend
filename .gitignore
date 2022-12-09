@@ -2,3 +2,5 @@ venv/
 .pytest_cache/
 .DS_Store/
 .idea/
+.env
+postgres_db/

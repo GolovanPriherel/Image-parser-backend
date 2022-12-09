@@ -1,6 +1,8 @@
 sqlalchemy
 pydantic
 pytest
-psycopg2
+psycopg2-binary
 fastapi
 uvicorn
+sqlalchemy_mixins
+python-dotenv

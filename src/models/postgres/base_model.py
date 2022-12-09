@@ -1,17 +1,37 @@
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import Session, declarative_base
+import logging
+from contextlib import contextmanager
 
-engine = create_engine('postgresql+psycopg2://postgres:postgres@postgres/images_info', echo=True, future=True)
-metadata = MetaData(bind=engine)
-Base = declarative_base(bind=engine)
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, declarative_base, scoped_session, sessionmaker
+from sqlalchemy_mixins import AllFeaturesMixin
 
-metadata.create_all()
+from src.settings import pg_settings
+
+Base = declarative_base()
 
 
+class BaseModel(Base, AllFeaturesMixin):
+
+    __abstract__ = True
+    pass
+
+
+@contextmanager
 def get_pg_session():
     pg_session = Session(
-        bind=engine,
+        bind=create_engine(pg_settings.geturl(), echo=True, future=True),
         autocommit=False,
     )
+    try:
+        yield pg_session
+    finally:
+        pg_session.close()
 
-    return pg_session
+
+def set_session():
+    logging.warning(pg_settings.geturl())
+    engine = create_engine(pg_settings.geturl())
+    db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
+    BaseModel.set_session(db_session)
+    Base.query = db_session.query_property()
+    Base.metadata.create_all(engine)
