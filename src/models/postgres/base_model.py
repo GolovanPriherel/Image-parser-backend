@@ -29,7 +29,6 @@ def get_pg_session():
 
 
 def set_session():
-    logging.warning(pg_settings.geturl())
     engine = create_engine(pg_settings.geturl())
     db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
     BaseModel.set_session(db_session)

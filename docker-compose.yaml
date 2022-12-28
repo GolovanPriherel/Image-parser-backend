@@ -12,8 +12,14 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
     volumes:
       - ./postgres_db/:/var/lib/postgresql/data
+    networks:
+      backend:
 
   parser_backend_service:
     build:
@@ -24,5 +30,14 @@ services:
     volumes:
       - ./data:/data
       - .env:/.env
-    depends_on:
+    links:
       - postgres_db
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      backend:
+
+networks:
+  backend:
+    name: backend

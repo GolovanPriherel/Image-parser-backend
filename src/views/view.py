@@ -1,13 +1,15 @@
 import logging
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, BackgroundTasks
 
-from src.models.postgres.images_info_model import ImagesInfoSchema
+from src.models.postgres.rule34_images_info import Rule34ImagesInfoModel, Rule34ImagesInfoSchema, \
+    Rule34ImagesInfoListSchema, InputURLs
 from src.operators.postgres import (
     create_database,
     data_insertion,
-    drop_database
+    rule34_insertion,
+    rule34_urls_insertion
 )
 
 
@@ -37,7 +39,12 @@ async def create_table():
 
 
 @router.post("/insert_data")
-async def insert_data(body: List[ImagesInfoSchema]):
-    data_insertion.execute(body)
+async def insert_data(params: Rule34ImagesInfoListSchema):
+    print(params)
+    rule34_insertion.execute(params)
 
-    return f'Успешно записано {len(body)} записи.'
+
+@router.post("/insert_urls")
+async def insert_urls(params: InputURLs):
+    params = params.data
+    rule34_urls_insertion.execute(params)
