@@ -1,4 +1,3 @@
-import logging
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine
@@ -29,8 +28,8 @@ def get_pg_session():
 
 
 def set_session():
-    engine = create_engine(pg_settings.geturl())
+    engine = create_engine(pg_settings.geturl(), echo=True, future=True)
     db_session = scoped_session(sessionmaker(autocommit=True, autoflush=True, bind=engine))
     BaseModel.set_session(db_session)
     Base.query = db_session.query_property()
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(bind=engine)

@@ -1,9 +1,6 @@
 import uvicorn
 
-from fastapi import FastAPI
-
 from src.app import create_app
-from src.models import postgres
 
 
 app = create_app()

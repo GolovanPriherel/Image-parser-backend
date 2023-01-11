@@ -10,8 +10,8 @@ class Rule34InsertImagesInfo:
         self.rule34_images_info = Rule34ImagesInfoModel
         self._data = []
 
-    def execute(self, data: Rule34ImagesInfoListSchema):
-        self._data = data.data
+    def execute(self, data: dict):
+        self._data = data
         with get_pg_session() as pg_session:
             try:
                 self.processing(pg_session)
@@ -21,7 +21,8 @@ class Rule34InsertImagesInfo:
 
     def processing(self, pg_session):
         for element in self._data:
-            pg_session.merge(Rule34ImagesInfoModel().fill(**element.dict()))
+            logging.warning(element)
+            pg_session.merge(Rule34ImagesInfoModel().fill(**element))
             # pg_session.execute(
             #     self.rule34_images_info.insert().values(element.dict())
             # )
