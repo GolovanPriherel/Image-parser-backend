@@ -6,3 +6,4 @@ fastapi
 uvicorn
 sqlalchemy_mixins
 python-dotenv
+alembic
